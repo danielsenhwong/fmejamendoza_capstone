@@ -1,0 +1,5 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+701b0911-a0f5-4267-805b-63a102106922	\N	masked_somatic_mutation	d85839ef-a9ff-48f1-b5db-6df4bdff9aa0	General	Notification	2022-02-28T14:48:11.173480-06:00	Approved	Variants from SomaticSniper are not included.
+64e055b1-fa05-55f4-a40c-2bfdd992857f	11912	case	a795a841-9fd6-4eac-b871-a8c70248700f	History of unacceptable prior treatment related to a prior/other malignancy	Notification	2012-11-10T00:00:00	Approved	Prior malignancy with systemic Treatment and locoregional radiation
+c5a00bd8-56d6-5d9c-ba95-c263e689e162	618	case	a795a841-9fd6-4eac-b871-a8c70248700f	Molecular analysis outside specification	Notification	2010-09-02T00:00:00	Approved	[intgen.org]: Molecular Results off Spec
+f1fd3cb6-094e-5502-80a0-47b5cc3a0ac3	5005	case	a795a841-9fd6-4eac-b871-a8c70248700f	Prior malignancy	Notification	2012-02-24T00:00:00	Approved	Prior malignancy with systemic treatment

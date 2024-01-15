@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+21244c65-9c21-4b3a-8e63-40633339c225	\N	masked_somatic_mutation	a3ea7a9f-7859-47bd-8288-04d5915ced86	General	Notification	2022-02-28T14:47:26.591543-06:00	Approved	Variants from SomaticSniper are not included.
+759c302d-b112-54c9-b3e2-79a2015a75b3	11669	case	aa703529-7153-4f74-8577-2601876e3374	Normal tissue origin incorrect	Notification	2012-10-31T00:00:00	Approved	Samples were created as tssDNA from Normal Tissue.  Actually are tssDNA extracted from Blood.  Should have been 10A instead of 11A.

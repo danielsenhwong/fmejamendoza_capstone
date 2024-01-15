@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+2a9be027-34be-4b6d-9cc7-5f70ce4ae00d	\N	masked_somatic_mutation	a1b4de36-90e2-45b4-b4b7-7df6cce21def	General	Notification	2022-02-28T14:54:47.380459-06:00	Approved	Variants from SomaticSniper are not included.
+0b635743-4dd8-54d3-824a-89d8d7458f1f	11661	case	e948d951-9299-4dec-9772-60b4ac3569cb	Neoadjuvant therapy	Notification	2012-10-31T00:00:00	Approved	Per enrollment form, patient received neo-adjuvant therapy.

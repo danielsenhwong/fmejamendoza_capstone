@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+ecdfa723-13bd-4bd3-85ed-c4b74f136c53	\N	masked_somatic_mutation	de358404-0967-4b3c-a13f-4e7ce52395c9	General	Notification	2022-02-28T13:38:31.008800-06:00	Approved	Variants from SomaticSniper are not included.
+c900d2d6-4077-5b1f-9882-101435d79bba	1707	analyte	35f8e2c9-985d-4c30-b8d3-274d26eeabbb	Item in special subset	Notification	2011-03-14T00:00:00	Approved	Portioning Study

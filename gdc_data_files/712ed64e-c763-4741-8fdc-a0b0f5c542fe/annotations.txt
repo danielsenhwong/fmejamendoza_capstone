@@ -1,0 +1,7 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+8c23467f-3b1c-446a-9cb6-5a0c0b91b0d2	\N	masked_somatic_mutation	712ed64e-c763-4741-8fdc-a0b0f5c542fe	General	Notification	2022-02-28T13:37:17.342587-06:00	Approved	Variants from SomaticSniper are not included.
+52c99b7a-22ed-527e-b2e0-374cfca117fa	1536	analyte	558557e0-392a-45ce-a2c6-52ac8dbea8c7	Item in special subset	Notification	2011-03-14T00:00:00	Approved	Necrosis Study
+e12bf3c1-d38b-5df2-ac6e-457e2bb55340	1535	analyte	558557e0-392a-45ce-a2c6-52ac8dbea8c7	Item is noncanonical	Notification	2011-03-14T00:00:00	Approved	Necrosis Study
+59214645-20b1-5f1d-a0db-6f90a114c470	566	case	2cb9975f-2d1e-4c74-867f-8b151c22b246	Item in special subset	Notification	2010-07-30T00:00:00	Approved	[schaefc]: NECROSIS_STUDY
+d3b2beab-84fe-58a0-854e-7cd1129e23aa	1542	analyte	38d4497c-a4b7-4858-a42a-cc613b43ebfc	Item in special subset	Notification	2011-03-14T00:00:00	Approved	Necrosis Study
+fac8990a-6287-5c46-a833-460c15ad4d05	1541	analyte	38d4497c-a4b7-4858-a42a-cc613b43ebfc	Item is noncanonical	Notification	2011-03-14T00:00:00	Approved	Necrosis Study

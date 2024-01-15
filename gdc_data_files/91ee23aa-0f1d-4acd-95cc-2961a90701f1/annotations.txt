@@ -1,0 +1,4 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+195afff5-e925-484f-9d2f-c805802507ed	\N	masked_somatic_mutation	91ee23aa-0f1d-4acd-95cc-2961a90701f1	General	Notification	2022-02-28T13:40:48.606935-06:00	Approved	Variants from SomaticSniper are not included.
+b20423f1-fecd-5dd9-9f03-07c3f71eacb6	1696	analyte	501b297f-8c36-4426-bd5f-c9b9767aeda0	Item is noncanonical	Notification	2011-03-14T00:00:00	Approved	Tumor Adjacent Normal
+7ab2528f-a083-55bb-bc15-7c3bc7154dc8	1694	analyte	e5e02cc7-d5c9-46cd-a011-57e15099f7c8	Item is noncanonical	Notification	2011-03-14T00:00:00	Approved	Tumor Adjacent Normal

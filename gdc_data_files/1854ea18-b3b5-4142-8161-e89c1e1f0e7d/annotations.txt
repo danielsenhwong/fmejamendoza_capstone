@@ -1,0 +1,5 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+3a947fbf-aac2-4c06-9f67-a457f091e0be	\N	masked_somatic_mutation	1854ea18-b3b5-4142-8161-e89c1e1f0e7d	General	Notification	2022-02-28T14:47:17.114547-06:00	Approved	Variants from SomaticSniper are not included.
+73f12fc6-dbe0-5f97-853b-22f28065732e	1533	analyte	9d57357f-a770-40fb-86bb-23a083ebd6c3	Item is noncanonical	Notification	2011-03-14T00:00:00	Approved	Tumor Adjacent Normal
+a40b3a0f-b32f-518c-8072-24263be9f53e	697	portion	bfd417c5-c8f4-4759-a250-ee8f8aa57272	Tumor class but appears normal	Observation	2010-07-30T00:00:00	Approved	[schaefc]: Dx slide resembles normal tissue
+8bfc7ed2-f808-5d29-93e2-caf02fc3fceb	1534	analyte	6889fa03-3a22-4950-8e92-a0fab215a993	Item is noncanonical	Notification	2011-03-14T00:00:00	Approved	Tumor Adjacent Normal

@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+f6598122-1705-4707-9d7b-89cc389dfcff	\N	masked_somatic_mutation	7cbef184-20d5-4055-815d-78c5e20e9e32	General	Notification	2022-02-28T13:41:56.560132-06:00	Approved	Variants from SomaticSniper are not included.
+bb6f5b0d-89ea-5aa1-be31-4af2c9fd9ead	11934	case	5438322c-9db0-4974-ba01-801020559f97	Case submitted is found to be a recurrence after submission	Notification	2012-11-10T00:00:00	Approved	Per enrollment form, patient had a prior diagnosis of a lower grade glioma.  Current TCGA tissue is reported as treated tissue.

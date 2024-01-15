@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+d626fb43-3787-4963-8917-a14c76cd84c6	\N	masked_somatic_mutation	83cba63a-ed43-434e-ab3e-7731d5485415	General	Notification	2022-02-28T14:47:32.528432-06:00	Approved	Variants from SomaticSniper are not included.
+b9ad4785-a9ad-5a49-a69f-8060ea04179e	11917	case	a515cf2d-e918-4958-9bf6-e611b425a97e	Case submitted is found to be a recurrence after submission	Notification	2012-11-10T00:00:00	Approved	Per enrollment form, patient had a prior diagnosis of a lower grade glioma.

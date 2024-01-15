@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+5d5aa0d9-6dd8-4c99-a020-f44aea775b79	\N	masked_somatic_mutation	5c54653d-200f-43c1-bdf9-44cdc687ab57	General	Notification	2022-02-28T13:41:50.709719-06:00	Approved	Variants from SomaticSniper are not included.
+2a20a846-d356-5a6e-ab02-b6fc73f6d8d6	621	case	872511fb-98cd-4fba-82f6-4c3689c75ae2	Molecular analysis outside specification	Notification	2010-09-15T00:00:00	Approved	[intgen.org]: Molecular Results off Spec

@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+1102e939-a907-4f4b-9eef-a4bc316d4c0a	\N	masked_somatic_mutation	3a9008c6-a4f6-4893-9c12-3d798a1a0d27	General	Notification	2022-02-28T15:01:09.591067-06:00	Approved	Variants from SomaticSniper are not included.
+de78c989-e74e-5ca3-a67a-66b02a9ccdf5	827	case	bb0aca6b-55ab-4b24-8e64-29e0c96a9862	Item may not meet study protocol	Observation	2010-10-28T00:00:00	Approved	Case identified (by Duke) as a secondary GBM; original annotation 06/22/09
