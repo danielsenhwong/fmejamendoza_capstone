@@ -7,15 +7,15 @@
 ### Set repository for packages
 r_repo <- "https://cloud.r-project.org"
 
-# We need these packages
+### We need these packages
 packages <- c(
   "data.table"
 )
 
-# Install packages
+### Install packages
 install.packages(packages, repo = r_repo)
 
-# Load all packages into library
+### Load all packages into library
 lapply(packages,
   library,
   character.only = TRUE)
@@ -29,7 +29,7 @@ data_root <- "gdc_data_files/"
 ## Build a list of folders in the data folder root to support navigation later
 data_folder_list <- list.dirs(
   path = data_root,
-  full.names=TRUE,
+  full.names = TRUE,
   recursive = FALSE
 )
 data_folder_list
@@ -54,7 +54,7 @@ gdc_df <- fread(
   # 2b. When you pull in new data from each new file as rows in the dataframe, also add in the folder (or file) name column
 )
 
-# ==== HOMEWORK STOPS HERE
+# ===== HOMEWORK STOPS HERE =====
 
 # Connect *.maf file file and folder names to Case ID
 bridge_df <- fread(
@@ -71,6 +71,8 @@ clinical_annot_df <- fread(
 # 1a. This will allow us to see who was male or female and actually support that analysis
 # 2. Build a list of genes of interest (i.e., which are important in T-cell exhaustion, stem cell pluripotency, etc.)
 
+
+# Example future list of genes of interest, categorized by position in relevant pathway(s)
 gene_df <- data.frame(
   gene_name =       c("NOTCH1",
                       "X",
