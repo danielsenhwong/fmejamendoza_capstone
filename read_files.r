@@ -9,11 +9,13 @@ r_repo <- "https://cloud.r-project.org"
 
 ### We need these packages
 packages <- c(
-  "readr",
   "purrr",
   "dplyr",
   "stringr",
-  "data.table"
+  "data.table",
+  "MASS",
+  "BiocManager",
+  "curl"
 )
 
 ### Install packages
@@ -23,6 +25,10 @@ install.packages(packages, repo = r_repo)
 lapply(packages,
   library,
   character.only = TRUE)
+
+### Also install a specific package for analysis of MAF files through Biocunductor
+BiocManager::install("maftools")
+library(maftools)
 
 ## Working Directory
 cwd <- getwd()
@@ -231,6 +237,10 @@ clinical_annot <- as.data.frame(
   )
 )
 
+analysis_df <- maf_data %>% inner_join(clinical_annot,
+  by = c("case_id" = "case_id"),
+  relationship = "many-to-many"
+)
 
 # Next, to support analysis:
 # 1. Write code to look up the clinical annotations (e.g,. sex, age, etc.) for each Case ID based on the *.maf file folder (or file) name
@@ -252,3 +262,47 @@ clinical_annot <- as.data.frame(
 #                       "step 3")
 # )
 
+# Discriminant Analysis
+lda_result <- lda(Hugo_Symbol ~ factor(gender) + as.numeric(age_at_index), data = analysis_df)
+lda_result
+
+###########
+# Try this with maftools package
+# What TCGA projects are available
+tcga_avail <- tcgaAvailable()
+tcga_avail
+
+# Grab the GBM project, it is only 400 patients from the MC3 source, fewer from the Broad
+# https://github.com/PoisonAlien/TCGAmutations
+tcga_gbm <- tcgaLoad(study = "GBM", source = "Firehose")
+tcga_gbm
+
+# Try making some plots
+# Plot mutations with a gender annotation
+oncoplot(
+  maf = tcga_gbm,
+  clinicalFeatures = "gender",
+  sortByAnnotation = TRUE
+)
+
+# Plot with pathways
+pathways = "smgbp"
+oncoplot(
+  maf = tcga_gbm,
+  pathways = pathways,
+  clinicalFeatures = "gender"
+)
+oncoplot(
+  maf = tcga_gbm,
+  pathways = pathways,
+  clinicalFeatures = "gender",
+  sortByAnnotation = TRUE
+)
+
+# Focus on a few genes
+oncoplot(
+  maf = tcga_gbm,
+  genes = c("EZH2", "KDM6A", "S1PR1"),
+  clinicalFeatures = "gender",
+  sortByAnnotation = TRUE
+)
