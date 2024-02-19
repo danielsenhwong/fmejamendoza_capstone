@@ -233,7 +233,14 @@ maf_data <- map_dfr(
 clinical_annot_file = "gdc_clinical_cart_files/clinical.tsv"
 clinical_annot <- as.data.frame(
   fread(
-    clinical_annot_file
+    clinical_annot_file,
+    colClasses = c(
+      "days_to_last_follow_up" = "numeric",
+      "vital_status" = "factor"
+    ),
+    na.strings = c(
+      "'--"
+    )
   )
 )
 
@@ -268,13 +275,14 @@ lda_result
 
 ###########
 # Try this with maftools package
+# https://bioconductor.org/packages/release/bioc/vignettes/maftools/inst/doc/maftools.htm
 # What TCGA projects are available
 tcga_avail <- tcgaAvailable()
 tcga_avail
 
 # Grab the GBM project, it is only 400 patients from the MC3 source, fewer from the Broad
 # https://github.com/PoisonAlien/TCGAmutations
-tcga_gbm <- tcgaLoad(study = "GBM", source = "Firehose")
+tcga_gbm <- tcgaLoad(study = "GBM")
 tcga_gbm
 
 # Try making some plots
@@ -290,13 +298,23 @@ pathways = "smgbp"
 oncoplot(
   maf = tcga_gbm,
   pathways = pathways,
-  clinicalFeatures = "gender"
+  clinicalFeatures = "gender",
+  gene_mar = 10
 )
 oncoplot(
   maf = tcga_gbm,
   pathways = pathways,
   clinicalFeatures = "gender",
+  gene_mar = 10,
   sortByAnnotation = TRUE
+)
+oncoplot(
+  maf = tcga_gbm,
+  pathways = pathways,
+  clinicalFeatures = "gender",
+  gene_mar = 10,
+  sortByAnnotation = TRUE,
+  collapsePathway = TRUE
 )
 
 # Focus on a few genes
@@ -305,4 +323,103 @@ oncoplot(
   genes = c("EZH2", "KDM6A", "S1PR1"),
   clinicalFeatures = "gender",
   sortByAnnotation = TRUE
+)
+
+# Try some analysis
+# not sure why this doesn't work
+mafSurvival(
+  maf = tcga_gbm,
+  genes = c("KDM6A", "EZH2", "PTEN"),
+  time = "days_to_last_followup",
+  Status = "vital_status",
+  isTCGA = TRUE
+)
+
+# Let's use the data we pulled
+# Bring the Tumor Sample Barcode column into the clinical data, and set the days_to_last_follow_up as numeric
+clinical_annot_merge <- left_join(
+  clinical_annot,
+  maf_data[, c("case_id", "Tumor_Sample_Barcode")],
+  by = "case_id"
+)
+
+# Merge all of the MAF files we downloaded ourselves, including the clinical data
+gdc_gbm <- merge_mafs(
+  maf_data_file_list,
+  clinicalData = clinical_annot_merge
+)
+
+oncoplot(
+  maf = gdc_gbm,
+  clinicalFeatures = "gender",
+  sortByAnnotation = TRUE
+)
+
+oncoplot(
+  maf = gdc_gbm,
+  pathways = pathways,
+  clinicalFeatures = "gender",
+  gene_mar = 10,
+  sortByAnnotation = TRUE,
+  collapsePathway = TRUE
+)
+
+oncoplot(
+  maf = gdc_gbm,
+  pathways = pathways,
+  clinicalFeatures = "gender",
+  gene_mar = 10,
+  sortByAnnotation = TRUE
+)
+
+# Not sure why this doesn't work
+mafSurvival(
+  maf = gdc_gbm,
+  genes = c("KDM6A", "EZH2", "PTEN"),
+  time = "days_to_last_follow_up",
+  Status = "vital_status"
+)
+
+plotmafSummary(
+  maf = gdc_gbm,
+  rmOutlier = TRUE,
+  addStat = 'median',
+  dashboard = TRUE,
+  titvRaw = FALSE
+)
+
+gdc_gbm.titv = titv(maf = gdc_gbm, plot = FALSE, useSyn = TRUE)
+#plot titv summary
+plotTiTv(res = gdc_gbm.titv)
+
+lollipopPlot(
+  maf = gdc_gbm,
+  gene = "KDM6A",
+  AACol = "HGVSp_Short",
+  showMutationRate = TRUE,
+  labelPos = "all"
+)
+
+rainfallPlot(
+  maf = gdc_gbm,
+  detectChangePoints = TRUE,
+  pointSize = 0.4
+)
+
+#exclusive/co-occurence event analysis on top 10 mutated genes. 
+somaticInteractions(maf = gdc_gbm, top = 25, pvalue = c(0.05, 0.1))
+
+# Detecting cancer driver genes based on positional clustering
+gdc_gbm.sig = oncodrive(maf = gdc_gbm, AACol = 'HGVSp_Short', minMut = 5, pvalMethod = 'zscore')
+plotOncodrive(res = gdc_gbm.sig, fdrCutOff = 0.1, useFraction = TRUE, labelSize = 0.5)
+
+#Using top 20 mutated genes to identify a set of genes (of size 2) to predict poor prognostic groups
+# this doesn't work either
+prog_geneset = survGroup(
+  maf = gdc_gbm,
+  top = 20,
+  geneSetSize = 2,
+  time = "days_to_last_follow_up",
+  Status = "vital_status",
+  verbose = FALSE
 )
