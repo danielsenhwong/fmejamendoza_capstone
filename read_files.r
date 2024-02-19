@@ -447,3 +447,12 @@ prog_geneset = survGroup(
   Status = "vital_status",
   verbose = FALSE
 )
+
+oncoplot(
+  maf = gdc_gbm,
+  pathways = "smgbp",
+  selectedPathways = "Immune signaling",
+  clinicalFeatures = "gender",
+  gene_mar = 10,
+  sortByAnnotation = TRUE
+)
