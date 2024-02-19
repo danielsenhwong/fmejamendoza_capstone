@@ -388,6 +388,14 @@ oncoplot(
   sortByAnnotation = TRUE
 )
 
+# Focus on a few genes
+oncoplot(
+  maf = gdc_gbm,
+  genes = c("EZH2", "KDM6A", "S1PR1"),
+  clinicalFeatures = "gender",
+  sortByAnnotation = TRUE
+)
+
 # Not sure why this doesn't work
 mafSurvival(
   maf = gdc_gbm,
@@ -402,6 +410,14 @@ plotTiTv(res = gdc_gbm.titv)
 
 lollipopPlot(
   maf = gdc_gbm,
+  gene = "KDM6A",
+  AACol = "HGVSp_Short",
+  showMutationRate = TRUE,
+  labelPos = "all"
+)
+
+lollipopPlot(
+  maf = tcga_gbm,
   gene = "KDM6A",
   AACol = "HGVSp_Short",
   showMutationRate = TRUE,
