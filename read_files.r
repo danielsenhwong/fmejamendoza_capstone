@@ -286,6 +286,14 @@ tcga_gbm <- tcgaLoad(study = "GBM")
 tcga_gbm
 
 # Try making some plots
+plotmafSummary(
+  maf = tcga_gbm,
+  rmOutlier = TRUE,
+  addStat = 'median',
+  dashboard = TRUE,
+  titvRaw = FALSE
+)
+
 # Plot mutations with a gender annotation
 oncoplot(
   maf = tcga_gbm,
@@ -349,6 +357,14 @@ gdc_gbm <- merge_mafs(
   clinicalData = clinical_annot_merge
 )
 
+plotmafSummary(
+  maf = gdc_gbm,
+  rmOutlier = TRUE,
+  addStat = 'median',
+  dashboard = TRUE,
+  titvRaw = FALSE
+)
+
 oncoplot(
   maf = gdc_gbm,
   clinicalFeatures = "gender",
@@ -378,14 +394,6 @@ mafSurvival(
   genes = c("KDM6A", "EZH2", "PTEN"),
   time = "days_to_last_follow_up",
   Status = "vital_status"
-)
-
-plotmafSummary(
-  maf = gdc_gbm,
-  rmOutlier = TRUE,
-  addStat = 'median',
-  dashboard = TRUE,
-  titvRaw = FALSE
 )
 
 gdc_gbm.titv = titv(maf = gdc_gbm, plot = FALSE, useSyn = TRUE)
