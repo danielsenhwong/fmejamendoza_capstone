@@ -272,6 +272,78 @@ analysis_kdm6a_female <- analysis_kdm6a[analysis_kdm6a$gender == "female"]
 # 1a. This will allow us to see who was male or female and actually support that analysis
 # 2. Build a list of genes of interest (i.e., which are important in T-cell exhaustion, stem cell pluripotency, etc.)
 
+# all mutated genes, count of unqiue patients
+# 14,465 genes total
+analysis_summary_all <- analysis_df %>%
+  group_by(Hugo_Symbol) %>%
+  summarize(n = n_distinct(case_id)) 
+
+# mutated genes on X chromosome, unique patients
+# 628 genes total
+analysis_summary_chrX <- analysis_df[analysis_df$Chromosome=="chrX"] %>%
+  group_by(Hugo_Symbol) %>%
+  summarize(n = n_distinct(case_id))
+
+# mutated genes in males, unique patients
+# 8,045 total
+analysis_summary_male <- analysis_df[analysis_df$gender=="male"] %>%
+  group_by(Hugo_Symbol) %>%
+  summarize(n = n_distinct(case_id))
+
+# mutated genes in females, unique patients
+# 12,899 total
+analysis_summary_female <- analysis_df[analysis_df$gender=="female"] %>%
+  group_by(Hugo_Symbol) %>%
+  summarize(n = n_distinct(case_id))
+
+# mutated genes on X chromosome, by gender, unique patients
+# 859 genes total
+analysis_summary_chrX_gender_group <- analysis_df[analysis_df$Chromosome=="chrX"] %>%
+  group_by(Hugo_Symbol, gender) %>%
+  summarize(n = n_distinct(case_id))
+
+# mutated genes on X chromosome in males, unique patients
+# 261 total
+analysis_summary_chrX_male <- analysis_df[
+  (analysis_df$Chromosome=="chrX") &
+    (analysis_df$gender=="male")
+] %>%
+  group_by(Hugo_Symbol) %>%
+  summarize(n = n_distinct(case_id))
+
+# mutated genes on X chromosome in females, unique patients
+# 598 total
+analysis_summary_chrX_female <- analysis_df[
+  (analysis_df$Chromosome=="chrX") &
+    (analysis_df$gender=="female")
+] %>%
+  group_by(Hugo_Symbol) %>%
+  summarize(n = n_distinct(case_id))
+
+# all mutated genes, count of unqiue patients
+# only 4 patients? this does not agree with above, seems like women are missing
+# -- no, this is right.
+# there are only four unique case ids, there are 6 unique tumor ids
+analysis_summary_kdm6a <- analysis_df[(analysis_df$Hugo_Symbol == "KDM6A")] %>%
+  group_by(Hugo_Symbol, gender) %>%
+  summarize(n = n_distinct(case_id))
+
+write.csv(analysis_summary_all,
+          "export_csv\\summary_all_mutated_tcga_gbm_genes.csv")
+write.csv(analysis_summary_chrX,
+          "export_csv\\summary_chrX_mutated_tcga_gbm_genes.csv")
+write.csv(analysis_summary_male,
+          "export_csv\\summary_male_mutated_tcga_gbm_genes.csv")
+write.csv(analysis_summary_female,
+          "export_csv\\summary_female_mutated_tcga_gbm_genes.csv")
+write.csv(analysis_summary_chrX_gender_group,
+          "export_csv\\summary_chrX_mutated_tcga_gbm_genes_by_gender.csv")
+write.csv(analysis_summary_chrX_male,
+          "export_csv\\summary_chrX_mutated_tcga_gbm_genes_male.csv")
+write.csv(analysis_summary_chrX_female,
+          "export_csv\\summary_chrX_mutated_tcga_gbm_genes_female.csv")
+write.csv(analysis_summary_kdm6a,
+          "export_csv\\summary_mutated_tcga_gbm_kdm6a.csv")
 
 # # Example future list of genes of interest, categorized by position in relevant pathway(s)
 # gene_df <- data.frame(
@@ -310,6 +382,10 @@ plotmafSummary(
   addStat = 'median',
   dashboard = TRUE,
   titvRaw = FALSE
+)
+
+oncoplot(
+  maf = tcga_gbm
 )
 
 # Plot mutations with a gender annotation
@@ -388,6 +464,10 @@ plotmafSummary(
   addStat = 'median',
   dashboard = TRUE,
   titvRaw = FALSE
+)
+
+oncoplot(
+  maf = gdc_gbm
 )
 
 oncoplot(
