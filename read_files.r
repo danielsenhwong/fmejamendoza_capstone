@@ -249,6 +249,24 @@ analysis_df <- maf_data %>% inner_join(clinical_annot,
   relationship = "many-to-many"
 )
 
+count(maf_data[maf_data$Chromosome == "chrX"])
+unique(maf_data$Chromosome)
+unique(maf_data$Hugo_Symbol[maf_data$Chromosome == "chrX"])
+
+# Notes for Flor's analysis
+# Fisher's test? Chi sq n must be >5
+# What is the frequency of mutation for these genes? The concern is the dataset is not large enough and insufficiently powered
+# Can Flor just do analysis on the X chromosome genes? How do we make a heatmap with just these
+# Is there a difference in the frequency of disease between men vs. women
+# What is the formula to determine sample size required for adequate power?
+## ? https://csg.sph.umich.edu/abecasis/cats/gas_power_calculator/
+## ? https://www.ejeph.com/download/the-association-between-snps-and-a-quantitative-trait-power-calculation-3925.pdf
+## ? https://www.semanticscholar.org/paper/Sample-Size-and-Statistical-Power-Calculation-in-Hong-Park/e476b89ad6acc97b06307549a58b9b81034b4c2b
+
+analysis_kdm6a <- (analysis_df[analysis_df$Hugo_Symbol == "KDM6A"])
+analysis_kdm6a_male <- analysis_kdm6a[analysis_kdm6a$gender == "male"]
+analysis_kdm6a_female <- analysis_kdm6a[analysis_kdm6a$gender == "female"]
+
 # Next, to support analysis:
 # 1. Write code to look up the clinical annotations (e.g,. sex, age, etc.) for each Case ID based on the *.maf file folder (or file) name
 # 1a. This will allow us to see who was male or female and actually support that analysis
@@ -337,7 +355,7 @@ oncoplot(
 # not sure why this doesn't work
 mafSurvival(
   maf = tcga_gbm,
-  genes = c("KDM6A", "EZH2", "PTEN"),
+  genes = "KDM6A",
   time = "days_to_last_followup",
   Status = "vital_status",
   isTCGA = TRUE
@@ -345,11 +363,18 @@ mafSurvival(
 
 # Let's use the data we pulled
 # Bring the Tumor Sample Barcode column into the clinical data, and set the days_to_last_follow_up as numeric
-clinical_annot_merge <- left_join(
+clinical_annot_merge <- merge(
   clinical_annot,
   maf_data[, c("case_id", "Tumor_Sample_Barcode")],
   by = "case_id"
 )
+colnames(clinical_annot_merge)[colnames(clinical_annot_merge)=="vital_status"] <- "Overall_Survival_Status"
+clinical_annot_merge$days_to_last_follow_up <- as.numeric(as.character(clinical_annot_merge$days_to_last_follow_up))
+clinical_annot_merge <- subset(clinical_annot_merge, Overall_Survival_Status==c("Alive", "Dead"))
+levels(clinical_annot_merge$Overall_Survival_Status)
+clinical_annot_merge$Overall_Survival_Status <- droplevels(clinical_annot_merge$Overall_Survival_Status)
+levels(clinical_annot_merge$Overall_Survival_Status)
+clinical_annot_merge$survival_cens <- as.logical(clinical_annot_merge$Overall_Survival_Status == "Alive")
 
 # Merge all of the MAF files we downloaded ourselves, including the clinical data
 gdc_gbm <- merge_mafs(
@@ -399,9 +424,9 @@ oncoplot(
 # Not sure why this doesn't work
 mafSurvival(
   maf = gdc_gbm,
-  genes = c("KDM6A", "EZH2", "PTEN"),
+  genes = c("PTEN"),
   time = "days_to_last_follow_up",
-  Status = "vital_status"
+  Status = "survival_cens"
 )
 
 gdc_gbm.titv = titv(maf = gdc_gbm, plot = FALSE, useSyn = TRUE)
