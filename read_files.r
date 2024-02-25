@@ -276,49 +276,70 @@ analysis_kdm6a_female <- analysis_kdm6a[analysis_kdm6a$gender == "female"]
 # 14,465 genes total
 analysis_summary_all <- analysis_df %>%
   group_by(Hugo_Symbol) %>%
-  summarize(n = n_distinct(case_id)) 
+  summarize(
+    n_pts = n_distinct(case_id),
+    n_tumor_samples = n_distinct(Tumor_Sample_Barcode)
+  )
 
 # mutated genes on X chromosome, unique patients
 # 628 genes total
-analysis_summary_chrX <- analysis_df[analysis_df$Chromosome=="chrX"] %>%
+analysis_summary_chrX <- analysis_df[analysis_df$Chromosome == "chrX"] %>%
   group_by(Hugo_Symbol) %>%
-  summarize(n = n_distinct(case_id))
+  summarize(
+    n_pts = n_distinct(case_id),
+    n_tumor_samples = n_distinct(Tumor_Sample_Barcode)
+  )
 
 # mutated genes in males, unique patients
 # 8,045 total
-analysis_summary_male <- analysis_df[analysis_df$gender=="male"] %>%
+analysis_summary_male <- analysis_df[analysis_df$gender == "male"] %>%
   group_by(Hugo_Symbol) %>%
-  summarize(n = n_distinct(case_id))
+  summarize(
+    n_pts = n_distinct(case_id),
+    n_tumor_samples = n_distinct(Tumor_Sample_Barcode)
+  )
 
 # mutated genes in females, unique patients
 # 12,899 total
-analysis_summary_female <- analysis_df[analysis_df$gender=="female"] %>%
+analysis_summary_female <- analysis_df[analysis_df$gender == "female"] %>%
   group_by(Hugo_Symbol) %>%
-  summarize(n = n_distinct(case_id))
+  summarize(
+    n_pts = n_distinct(case_id),
+    n_tumor_samples = n_distinct(Tumor_Sample_Barcode)
+  )
 
 # mutated genes on X chromosome, by gender, unique patients
 # 859 genes total
-analysis_summary_chrX_gender_group <- analysis_df[analysis_df$Chromosome=="chrX"] %>%
+analysis_summary_chrX_gender_group <- analysis_df[analysis_df$Chromosome == "chrX"] %>%
   group_by(Hugo_Symbol, gender) %>%
-  summarize(n = n_distinct(case_id))
+  summarize(
+    n_pts = n_distinct(case_id),
+    n_tumor_samples = n_distinct(Tumor_Sample_Barcode)
+  )
 
 # mutated genes on X chromosome in males, unique patients
 # 261 total
 analysis_summary_chrX_male <- analysis_df[
-  (analysis_df$Chromosome=="chrX") &
-    (analysis_df$gender=="male")
+  (analysis_df$Chromosome == "chrX") &
+    (analysis_df$gender == "male")
 ] %>%
   group_by(Hugo_Symbol) %>%
-  summarize(n = n_distinct(case_id))
+  summarize(
+    n_pts = n_distinct(case_id),
+    n_tumor_samples = n_distinct(Tumor_Sample_Barcode)
+  )
 
 # mutated genes on X chromosome in females, unique patients
 # 598 total
 analysis_summary_chrX_female <- analysis_df[
-  (analysis_df$Chromosome=="chrX") &
-    (analysis_df$gender=="female")
+  (analysis_df$Chromosome == "chrX") &
+    (analysis_df$gender == "female")
 ] %>%
   group_by(Hugo_Symbol) %>%
-  summarize(n = n_distinct(case_id))
+  summarize(
+    n_pts = n_distinct(case_id),
+    n_tumor_samples = n_distinct(Tumor_Sample_Barcode)
+  )
 
 # all mutated genes, count of unqiue patients
 # only 4 patients? this does not agree with above, seems like women are missing
@@ -326,7 +347,10 @@ analysis_summary_chrX_female <- analysis_df[
 # there are only four unique case ids, there are 6 unique tumor ids
 analysis_summary_kdm6a <- analysis_df[(analysis_df$Hugo_Symbol == "KDM6A")] %>%
   group_by(Hugo_Symbol, gender) %>%
-  summarize(n = n_distinct(case_id))
+  summarize(
+    n_pts = n_distinct(case_id),
+    n_tumor_samples = n_distinct(Tumor_Sample_Barcode)
+  )
 
 write.csv(analysis_summary_all,
           "export_csv\\summary_all_mutated_tcga_gbm_genes.csv")
@@ -560,4 +584,139 @@ oncoplot(
   clinicalFeatures = "gender",
   gene_mar = 10,
   sortByAnnotation = TRUE
+)
+
+somaticInteractions(
+  maf = gdc_gbm,
+  top = 25,
+  pvalue = c(0.05, 0.1),
+  fontSize = 0.5
+)
+
+mafSurvival(maf = gdc_gbm, gene="PTEN", time = 'days_to_last_follow_up', Status = 'Overall_Survival_Status', isTCGA = TRUE)
+
+# Subset GDC GBM data by MAF column
+gdc_gbm_Xlinked <- subsetMaf(maf = gdc_gbm, query = "Chromosome == 'chrX'")
+gdc_gbm_kdm6a <- subsetMaf(maf = gdc_gbm, query = "Hugo_Symbol == 'KDM6A'")
+
+# Subset GDC GBM data by clinical annotations
+# gender is male
+gdc_gbm_male <- subsetMaf(maf = gdc_gbm, clinQuery = "gender %in% 'male'")
+gdc_gbm_Xlinked_male <- subsetMaf(
+  maf = gdc_gbm,
+  query = "Chromosome == 'chrX'",
+  clinQuery = "gender %in% 'male'"
+)
+# gender is female
+gdc_gbm_female <- subsetMaf(maf = gdc_gbm, clinQuery = "gender %in% 'female'")
+gdc_gbm_Xlinked_female <- subsetMaf(
+  maf = gdc_gbm,
+  query = "Chromosome == 'chrX'",
+  clinQuery = "gender %in% 'female'"
+)
+
+oncoplot(
+  maf = gdc_gbm,
+  top = 25
+)
+
+oncoplot(
+  maf = gdc_gbm_Xlinked,
+  top = 25
+)
+
+plotmafSummary(
+  maf = gdc_gbm_kdm6a
+)
+plotmafSummary(
+  maf = gdc_gbm_male
+)
+plotmafSummary(
+  maf = gdc_gbm_female
+)
+
+# Plot mutations with a gender annotation for amle subset
+oncoplot(
+  maf = gdc_gbm_male,
+  top = 25,
+  clinicalFeatures = "gender",
+  sortByAnnotation = TRUE
+)
+oncoplot(
+  maf = gdc_gbm_Xlinked_male,
+  top = 25,
+  clinicalFeatures = "gender",
+  sortByAnnotation = TRUE
+)
+
+# Plot mutations with a gender annotation for female subset
+oncoplot(
+  maf = gdc_gbm_female,
+  top = 25,
+  clinicalFeatures = "gender",
+  sortByAnnotation = TRUE
+)
+oncoplot(
+  maf = gdc_gbm_Xlinked_female,
+  top = 25,
+  clinicalFeatures = "gender",
+  sortByAnnotation = TRUE
+)
+
+# Not useful
+# laml.titv_gdc_gbm_kdm6a <- titv(
+#   maf = gdc_gbm_kdm6a,
+#   plot = FALSE,
+#   useSyn = TRUE
+# )
+# plotTiTv(
+#   res = laml.titv_gdc_gbm_kdm6a
+# )
+
+lollipopPlot(
+  maf = gdc_gbm_kdm6a,
+  gene = "KDM6A",
+  showMutationRate = TRUE
+)
+
+rainfallPlot(
+  maf = gdc_gbm
+)
+
+rainfallPlot(
+  maf = gdc_gbm_male
+)
+
+# does not work
+# laml.mutload_gdc_gbm = tcgaCompare(
+#   maf = gdc_gbm,
+#   cohortName = 'GDC-GBM',
+#   logscale = TRUE,
+#   capture_size = 50
+# )
+
+# plotVaf(
+#   maf = gdc_gbm
+# )
+
+# maftools survival functions look for Tumor_Sample_Barcode in clinical data
+# But GBM project data only has case_id, so use our merged dataframe to provide
+prog_geneset = survGroup(
+  maf = gdc_gbm,
+  top = 20,
+  geneSetSize = 2,
+  time = "days_to_last_follow_up",
+  Status = "vital_status",
+  verbose = FALSE,
+  clinicalData = analysis_df
+)
+print(prog_geneset)
+
+mafSurvival(
+  maf = gdc_gbm,
+  genes = c("KDM6A", "EZH2"),
+  clinicalData = analysis_df,
+  time = "days_to_last_follow_up",
+  Status = "vital_status",
+  isTCGA = TRUE
 )
