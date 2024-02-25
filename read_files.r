@@ -383,83 +383,83 @@ write.csv(analysis_summary_kdm6a,
 #                       "step 3")
 # )
 
-# Discriminant Analysis
-lda_result <- lda(Hugo_Symbol ~ factor(gender) + as.numeric(age_at_index), data = analysis_df)
-lda_result
+# # Discriminant Analysis
+# lda_result <- lda(Hugo_Symbol ~ factor(gender) + as.numeric(age_at_index), data = analysis_df)
+# lda_result
 
 ###########
 # Try this with maftools package
 # https://bioconductor.org/packages/release/bioc/vignettes/maftools/inst/doc/maftools.htm
-# What TCGA projects are available
-tcga_avail <- tcgaAvailable()
-tcga_avail
+# # What TCGA projects are available
+# tcga_avail <- tcgaAvailable()
+# tcga_avail
 
-# Grab the GBM project, it is only 400 patients from the MC3 source, fewer from the Broad
-# https://github.com/PoisonAlien/TCGAmutations
-tcga_gbm <- tcgaLoad(study = "GBM")
-tcga_gbm
+# # Grab the GBM project, it is only 400 patients from the MC3 source, fewer from the Broad
+# # https://github.com/PoisonAlien/TCGAmutations
+# tcga_gbm <- tcgaLoad(study = "GBM")
+# tcga_gbm
 
-# Try making some plots
-plotmafSummary(
-  maf = tcga_gbm,
-  rmOutlier = TRUE,
-  addStat = 'median',
-  dashboard = TRUE,
-  titvRaw = FALSE
-)
+# # Try making some plots
+# plotmafSummary(
+#   maf = tcga_gbm,
+#   rmOutlier = TRUE,
+#   addStat = 'median',
+#   dashboard = TRUE,
+#   titvRaw = FALSE
+# )
 
-oncoplot(
-  maf = tcga_gbm
-)
+# oncoplot(
+#   maf = tcga_gbm
+# )
 
-# Plot mutations with a gender annotation
-oncoplot(
-  maf = tcga_gbm,
-  clinicalFeatures = "gender",
-  sortByAnnotation = TRUE
-)
+# # Plot mutations with a gender annotation
+# oncoplot(
+#   maf = tcga_gbm,
+#   clinicalFeatures = "gender",
+#   sortByAnnotation = TRUE
+# )
 
-# Plot with pathways
-pathways = "smgbp"
-oncoplot(
-  maf = tcga_gbm,
-  pathways = pathways,
-  clinicalFeatures = "gender",
-  gene_mar = 10
-)
-oncoplot(
-  maf = tcga_gbm,
-  pathways = pathways,
-  clinicalFeatures = "gender",
-  gene_mar = 10,
-  sortByAnnotation = TRUE
-)
-oncoplot(
-  maf = tcga_gbm,
-  pathways = pathways,
-  clinicalFeatures = "gender",
-  gene_mar = 10,
-  sortByAnnotation = TRUE,
-  collapsePathway = TRUE
-)
+# # Plot with pathways
+# pathways = "smgbp"
+# oncoplot(
+#   maf = tcga_gbm,
+#   pathways = pathways,
+#   clinicalFeatures = "gender",
+#   gene_mar = 10
+# )
+# oncoplot(
+#   maf = tcga_gbm,
+#   pathways = pathways,
+#   clinicalFeatures = "gender",
+#   gene_mar = 10,
+#   sortByAnnotation = TRUE
+# )
+# oncoplot(
+#   maf = tcga_gbm,
+#   pathways = pathways,
+#   clinicalFeatures = "gender",
+#   gene_mar = 10,
+#   sortByAnnotation = TRUE,
+#   collapsePathway = TRUE
+# )
 
-# Focus on a few genes
-oncoplot(
-  maf = tcga_gbm,
-  genes = c("EZH2", "KDM6A", "S1PR1"),
-  clinicalFeatures = "gender",
-  sortByAnnotation = TRUE
-)
+# # Focus on a few genes
+# oncoplot(
+#   maf = tcga_gbm,
+#   genes = c("EZH2", "KDM6A", "S1PR1"),
+#   clinicalFeatures = "gender",
+#   sortByAnnotation = TRUE
+# )
 
-# Try some analysis
-# not sure why this doesn't work
-mafSurvival(
-  maf = tcga_gbm,
-  genes = "KDM6A",
-  time = "days_to_last_followup",
-  Status = "vital_status",
-  isTCGA = TRUE
-)
+# # Try some analysis
+# # not sure why this doesn't work
+# mafSurvival(
+#   maf = tcga_gbm,
+#   genes = "KDM6A",
+#   time = "days_to_last_followup",
+#   Status = "vital_status",
+#   isTCGA = TRUE
+# )
 
 # Let's use the data we pulled
 # Bring the Tumor Sample Barcode column into the clinical data, and set the days_to_last_follow_up as numeric
@@ -595,6 +595,7 @@ somaticInteractions(
 
 mafSurvival(maf = gdc_gbm, gene="PTEN", time = 'days_to_last_follow_up', Status = 'Overall_Survival_Status', isTCGA = TRUE)
 
+#########
 # Subset GDC GBM data by MAF column
 gdc_gbm_Xlinked <- subsetMaf(maf = gdc_gbm, query = "Chromosome == 'chrX'")
 gdc_gbm_kdm6a <- subsetMaf(maf = gdc_gbm, query = "Hugo_Symbol == 'KDM6A'")
@@ -719,4 +720,114 @@ mafSurvival(
   time = "days_to_last_follow_up",
   Status = "vital_status",
   isTCGA = TRUE
+)
+
+# Plot with pathways
+pathways = "smgbp"
+# Top pathways
+oncoplot(
+  maf = gdc_gbm,
+  pathways = pathways,
+  gene_mar = 10
+)
+# Summarizing known driver genes [Bailey et al., https://doi.org/10.1016/j.cell.2018.02.060]
+# Drawing upto top 3 mutated pathways
+#                                Pathway  N n_affected_genes fraction_affected Mutated_samples Fraction_mutated_samples
+#  1:                     PI3K signaling  9                9         1.0000000             229              0.500000000
+#  2:                   Genome integrity 14               14         1.0000000             190              0.414847162
+#  3:                      RTK signaling 16               16         1.0000000             143              0.312227074
+#  4:                              Other 22               19         0.8636364             121              0.264192140
+#  5:               Transcription factor 39               29         0.7435897              87              0.189956332
+#  6:                     MAPK signaling  9                7         0.7777778              66              0.144104803
+#  7:        Chromatin histone modifiers 15               14         0.9333333              51              0.111353712
+#  8:          Chromatin SWI/SNF complex  8                7         0.8750000              50              0.109170306
+#  9:                         Cell cycle  8                5         0.6250000              49              0.106986900
+# 10:                    Chromatin other 14               11         0.7857143              41              0.089519651
+# 11:                    Other signaling 28               22         0.7857143              41              0.089519651
+# 12: Protein homeostasis/ubiquitination 15               11         0.7333333              40              0.087336245
+# 13:                         Metabolism  2                2         1.0000000              27              0.058951965
+# 14:                      RNA abundance 15               11         0.7333333              22              0.048034934
+# 15:            Wnt/B-catenin signaling  8                7         0.8750000              18              0.039301310
+# 16:               Histone modification  3                2         0.6666667              13              0.028384279
+# 17:                   Immune signaling 10                5         0.5000000              12              0.026200873
+# 18:                     TGFB signaling  7                6         0.8571429              10              0.021834061
+# 19:                      TOR signaling  3                2         0.6666667               8              0.017467249
+# 20:                     NFKB signaling  2                2         1.0000000               8              0.017467249
+# 21:                          Apoptosis  3                2         0.6666667               4              0.008733624
+# 22:                           Splicing  6                4         0.6666667               4              0.008733624
+# 23:          Epigenetics DNA modifiers  1                1         1.0000000               3              0.006550218
+# 24:                    NOTCH signaling  1                0         0.0000000               0              0.000000000
+#                                Pathway  N n_affected_genes fraction_affected Mutated_samples Fraction_mutated_samples
+# Specific pathways
+oncoplot(
+  maf = gdc_gbm,
+  pathways = pathways,
+  gene_mar = 10,
+  selectedPathways = "Transcription factor"
+)
+oncoplot(
+  maf = gdc_gbm,
+  pathways = pathways,
+  gene_mar = 10,
+  selectedPathways = "Chromatin histone modifiers"
+)
+oncoplot(
+  maf = gdc_gbm,
+  pathways = pathways,
+  gene_mar = 10,
+  selectedPathways = "Histone modification"
+)
+oncoplot(
+  maf = gdc_gbm,
+  pathways = pathways,
+  gene_mar = 10,
+  selectedPathways = "Immune signaling"
+)
+
+# Oncogenic signaling pathways
+pws = pathways(
+  maf = gdc_gbm,
+  pathdb = "smgbp"
+)
+write.csv(pws,
+          "export_csv\\pathway_summary.csv")
+
+pws_xlinked = pathways(
+  maf = gdc_gbm_Xlinked,
+  pathdb = "smgbp"
+)
+write.csv(pws,
+          "export_csv\\pathway_summary_xlinked.csv")
+
+pws_male = pathways(
+  maf = gdc_gbm_male,
+  pathdb = "smgbp"
+)
+write.csv(pws,
+          "export_csv\\pathway_summary_male.csv")
+
+pws_female = pathways(
+  maf = gdc_gbm_female,
+  pathdb = "smgbp"
+)
+write.csv(pws,
+          "export_csv\\pathway_summary_female.csv")
+
+pws_xlinked_male = pathways(
+  maf = gdc_gbm_Xlinked_male,
+  pathdb = "smgbp"
+)
+write.csv(pws,
+          "export_csv\\pathway_summary_xlinked_male.csv")
+
+pws_xlinked_female = pathways(
+  maf = gdc_gbm_Xlinked_female,
+  pathdb = "smgbp"
+)
+write.csv(pws,
+          "export_csv\\pathway_summary_xlinked_female.csv")
+
+plotO(
+  gdc_gbm,
+  pathways = pathways
 )
