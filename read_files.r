@@ -713,9 +713,12 @@ prog_geneset = survGroup(
 )
 print(prog_geneset)
 
+tsb_kdm6a <- unique(analysis_df$Tumor_Sample_Barcode[analysis_df$Hugo_Symbol == "KDM6A"])
+tsb_not_kdm6a <- unique(analysis_df$Tumor_Sample_Barcode[!(analysis_df$Tumor_Sample_Barcode %in% tsb_kdm6a)])
+
 mafSurvival(
   maf = gdc_gbm,
-  genes = c("KDM6A", "EZH2"),
+  genes = "KDM6A",
   clinicalData = analysis_df,
   time = "days_to_last_follow_up",
   Status = "vital_status",
@@ -796,38 +799,33 @@ pws_xlinked = pathways(
   maf = gdc_gbm_Xlinked,
   pathdb = "smgbp"
 )
-write.csv(pws,
+write.csv(pws_xlinked,
           "export_csv\\pathway_summary_xlinked.csv")
 
 pws_male = pathways(
   maf = gdc_gbm_male,
   pathdb = "smgbp"
 )
-write.csv(pws,
+write.csv(pws_male,
           "export_csv\\pathway_summary_male.csv")
 
 pws_female = pathways(
   maf = gdc_gbm_female,
   pathdb = "smgbp"
 )
-write.csv(pws,
+write.csv(pws_female,
           "export_csv\\pathway_summary_female.csv")
 
 pws_xlinked_male = pathways(
   maf = gdc_gbm_Xlinked_male,
   pathdb = "smgbp"
 )
-write.csv(pws,
+write.csv(pws_xlinked_male,
           "export_csv\\pathway_summary_xlinked_male.csv")
 
 pws_xlinked_female = pathways(
   maf = gdc_gbm_Xlinked_female,
   pathdb = "smgbp"
 )
-write.csv(pws,
+write.csv(pws_xlinked_female,
           "export_csv\\pathway_summary_xlinked_female.csv")
-
-plotO(
-  gdc_gbm,
-  pathways = pathways
-)
